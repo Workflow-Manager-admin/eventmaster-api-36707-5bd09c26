@@ -3,6 +3,7 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 from datetime import datetime
 
+
 # PUBLIC_INTERFACE
 class AttendeeBase(BaseModel):
     """Base model for an attendee."""
