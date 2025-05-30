@@ -3,9 +3,10 @@ from typing import List, Optional
 from threading import Lock
 from datetime import datetime
 
+
 from .models import Event, EventCreate, EventUpdate, Attendee, AttendeeCreate
 
-# Simple in-memory storage and ID sequence
+
 class Storage:
     event_id_seq = 1
     attendee_id_seq = 1
@@ -13,7 +14,9 @@ class Storage:
     attendees = {}  # attendee_id: Attendee
     lock = Lock()
 
+
 storage = Storage()
+
 
 # PUBLIC_INTERFACE
 def create_event(obj: EventCreate) -> Event:
@@ -25,10 +28,12 @@ def create_event(obj: EventCreate) -> Event:
         storage.events[event_id] = event
         return event
 
+
 # PUBLIC_INTERFACE
 def get_event(event_id: int) -> Optional[Event]:
     """Return a single event or None."""
     return storage.events.get(event_id)
+
 
 # PUBLIC_INTERFACE
 def update_event(event_id: int, obj: EventUpdate) -> Optional[Event]:
@@ -42,6 +47,7 @@ def update_event(event_id: int, obj: EventUpdate) -> Optional[Event]:
             setattr(event, k, v)
         return event
 
+
 # PUBLIC_INTERFACE
 def delete_event(event_id: int) -> bool:
     """Delete an event by ID."""
@@ -51,10 +57,12 @@ def delete_event(event_id: int) -> bool:
             return True
         return False
 
+
 # PUBLIC_INTERFACE
 def list_events() -> List[Event]:
     """List all events."""
     return list(storage.events.values())
+
 
 # PUBLIC_INTERFACE
 def search_events(
@@ -71,7 +79,9 @@ def search_events(
             continue
         if location and location.lower() not in event.location.lower():
             continue
-        if keyword and (keyword.lower() not in (event.title.lower() + str(event.description or "").lower() + event.location.lower())):
+        desc = str(event.description or "")
+        search_blob = event.title.lower() + desc.lower() + event.location.lower()
+        if keyword and (keyword.lower() not in search_blob):
             continue
         if date_from and event.date < date_from:
             continue
@@ -80,7 +90,9 @@ def search_events(
         results.append(event)
     return results
 
+
 # --- Attendees ---
+
 
 # PUBLIC_INTERFACE
 def add_attendee(event_id: int, obj: AttendeeCreate) -> Optional[Attendee]:
@@ -96,6 +108,7 @@ def add_attendee(event_id: int, obj: AttendeeCreate) -> Optional[Attendee]:
         storage.attendees[attendee_id] = attendee
         return attendee
 
+
 # PUBLIC_INTERFACE
 def remove_attendee(event_id: int, attendee_id: int) -> bool:
     """Remove an attendee from event."""
@@ -110,6 +123,7 @@ def remove_attendee(event_id: int, attendee_id: int) -> bool:
         storage.attendees.pop(attendee_id, None)
         return True
 
+
 # PUBLIC_INTERFACE
 def list_attendees(event_id: int) -> Optional[List[Attendee]]:
     """List all attendees for an event."""
@@ -117,6 +131,7 @@ def list_attendees(event_id: int) -> Optional[List[Attendee]]:
     if event:
         return event.attendees
     return None
+
 
 # PUBLIC_INTERFACE
 def set_rsvp(event_id: int, attendee_id: int, rsvp: bool) -> bool:
@@ -131,12 +146,15 @@ def set_rsvp(event_id: int, attendee_id: int, rsvp: bool) -> bool:
                 return True
         return False
 
+
 # --- Notifications ---
+
 
 # PUBLIC_INTERFACE
 def send_event_notification(event_id: int, message: str) -> bool:
     """Stub: This would send a notification to all event attendees. Here, we just simulate."""
     return event_id in storage.events
+
 
 # PUBLIC_INTERFACE
 def send_attendee_notification(event_id: int, attendee_id: int, message: str) -> bool:
