@@ -1,0 +1,4 @@
+{
+    "command": "pytest",
+    "working_directory": "/home/kavia/workspace/code-generation/eventmaster-api-36707-5bd09c26/eventmaster_api"
+}
