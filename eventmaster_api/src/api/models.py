@@ -10,10 +10,12 @@ class AttendeeBase(BaseModel):
     name: str = Field(..., example="Jane Doe")
     email: str = Field(..., example="jane@example.com")
 
+
 # PUBLIC_INTERFACE
 class AttendeeCreate(AttendeeBase):
     """Model to create a new attendee."""
     pass
+
 
 # PUBLIC_INTERFACE
 class Attendee(AttendeeBase):
@@ -24,6 +26,7 @@ class Attendee(AttendeeBase):
     class Config:
         orm_mode = True
 
+
 # PUBLIC_INTERFACE
 class EventBase(BaseModel):
     """Base model for an event."""
@@ -32,10 +35,12 @@ class EventBase(BaseModel):
     location: str = Field(..., example="Conference Room A")
     date: datetime = Field(..., example="2024-07-16T09:00:00")
 
+
 # PUBLIC_INTERFACE
 class EventCreate(EventBase):
     """Model to create a new event."""
     pass
+
 
 # PUBLIC_INTERFACE
 class EventUpdate(BaseModel):
@@ -44,6 +49,7 @@ class EventUpdate(BaseModel):
     description: Optional[str] = None
     location: Optional[str] = None
     date: Optional[datetime] = None
+
 
 # PUBLIC_INTERFACE
 class Event(EventBase):
@@ -54,11 +60,13 @@ class Event(EventBase):
     class Config:
         orm_mode = True
 
+
 # PUBLIC_INTERFACE
 class NotificationRequest(BaseModel):
     """Model to trigger notifications for an event or attendees."""
     event_id: int
     message: str
+
 
 # PUBLIC_INTERFACE
 class EventSearchFilter(BaseModel):
