@@ -169,4 +169,3 @@ def notify_attendee(event_id: int, attendee_id: int, message: str = Body(...)):
     if not ok:
         raise HTTPException(status_code=404, detail="Event or Attendee not found")
     return {"success": True, "message": "Notification sent to attendee (simulated)."}
-
